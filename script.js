@@ -1,5 +1,6 @@
 "use strict";
 // Реакт БАЗА. УРОК 85. Есть React Native - для моб.приложений, ecnm React 360 - виртульная реальность
+/*
 let a = 0;
 console.log(a);
 
@@ -46,8 +47,10 @@ console.log(answers);               // [ 'ivan', 'anna', 'hello' ]
 
 // ИНТЕРПОЛЯЦИЯ
 console.log(`Пользователь ${name}, ${age} лет.`);
+*/
 
-function fetchData(data, count /* = 0 */) {     // можно прям в параметре присвоить значение 
+/*
+function fetchData(data, count = 0 ) {     // можно прям в параметре присвоить значение 
     console.log(`Данные: ${data} в количестве ${count}`);
 }
 fetchData('something');             // Данные: something в количестве undefined
@@ -264,4 +267,137 @@ const {gender: {male: [maleUnder18, maleAdult], female: [femaleUnder18, femaleAd
 
 console.log(`Мужчины до 18: ${maleUnder18}, женщины старше 18: ${femaleAdult}.`);
 // Мужчины до 18: 15%, женщины старше 18: 29%.
+*/
 
+// УРОК 86. Домашнее задание 
+// Старый формат
+/*
+var employers = ['Alex', '', 'ludmila', 'Viktor', '', 'oleg', 'iNna', 'Ivan', 'Alex', 'Olga', ' Ann'];
+
+var employersNames = [];
+for (var i = 0; i < employers.length; i++) {
+	if (employers[i].length > 0 && employers[i].length != '') {
+		employersNames.push(employers[i]);
+	}
+}
+for (var i = 0; i < employersNames.length; i++) {
+	employersNames[i] = employersNames[i].toLowerCase().trim();
+}
+
+var sponsors = {
+    cash: [40000, 5000, 30400, 12000],
+    eu: ['SRL', 'PLO', 'J&K'],
+    rus: ['RusAuto', 'SBO']
+};
+
+function calcCash(own) {
+    own = own || 0;
+    var everyCash = Array.prototype.slice.call(arguments);
+    var total = own;
+    for (var i = 0; i < everyCash[1].length; i++) {
+        total += +everyCash[1][i];
+    }
+    return total;
+}
+
+var money = calcCash(null, sponsors.cash);
+
+function makeBusiness(owner, director, cash, emp) {
+    director = director || 'Victor';
+    var sumSponsors = sponsors.eu.concat(sponsors.rus, 'unexpected sponsor');
+    console.log('We have a business. Owner: ' + owner + ', director: ' + director + '. Our budget: ' + cash + '. And our employers: ' +
+    emp);
+    console.log('And we have a sponsors: ');
+    console.log.apply(null, sumSponsors);
+    console.log('Note. Be careful with ' + sponsors.eu[0] + ". It's a huge risk.");
+}
+makeBusiness.apply(null, ['Sam', null, money, employersNames]);
+*/
+
+// Новый формат 
+/*
+const employers = ['Alex', '', 'ludmila', 'Viktor', '', 'oleg', 'iNna', 'Ivan', 'Alex', 'Olga', ' Ann'];
+
+const employersNames = employers.filter(employer => employer).map((item) => item.toLowerCase().trim());
+
+let sponsors = {
+    cash: [40000, 5000, 30400, 12000],
+    eu: ['SRL', 'PLO', 'J&K'],
+    rus: ['RusAuto', 'SBO']
+};
+
+const {cash, eu, rus} = sponsors;
+
+const sumSponsors = [...eu, ...rus, 'unexpected sponsor'];
+
+const calcCash = (cash = 0) => cash.reduce((a, b) => a + b);
+
+const money = calcCash(cash);
+
+const makeBusiness = ({cash, emp, owner = 'Sam', director = 'Victor'}) => {
+    console.log(`We have a business. Owner: ${owner} , director: ${director} . Our budget: ${cash} . And our employers: ${emp}
+And we have a sponsors: ${sumSponsors}
+Note. Be careful with ${eu[0]}. It's a huge risk.`);
+};
+makeBusiness({cash: money, emp: employersNames});
+*/
+
+// УРОК 87. Классы в ES6, модульная структура. Сборка проекта
+function buttor() {
+    return 'button';
+}
+
+// Класс - сущность, которая будет создавать экземпляры 
+class Slider {
+    constructor(width, height, count) {
+        this.width = width;
+        this.height = height;
+        this.count = count;
+    }
+    //методы
+    nextSlide() {
+        console.log('Moving forward!');
+    }
+    prevSlide() {
+        console.log('Moving back!');
+    }
+    whoAmI() {
+        console.log(this.width, this.height, this.count);
+    }
+}
+const slider = new Slider(600, 400, 5);
+      someSlider = new Slider(300, 450, 10);
+slider.whoAmI();        // 600 400 5 
+someSlider.whoAmI();    // 300 450 10
+
+class AutoSlider extends Slider {
+    constructor(width, height, count, auto) {
+        super(width, height, count);
+        this.auto = auto;
+    }
+    // метод
+    play() {
+        console.log(`Autoplay: ${this.auto}`);
+    }
+}
+
+// Методы - наследуются, конструкторы - нет
+const slider2 = new AutoSlider(500, 500, 4, true);
+slider2.whoAmI();       // 500 500 4
+slider2.play();         // Autoplay: true
+
+export {button};
+
+export default Slider;  // экспортируем 1 сущность
+
+// Чтобы не писать в импортах расширение
+// В терминал: npm install webpack webpack-cli --save-dev
+// npx webpack
+
+// Создаём проект React.
+/*
+npm i create-react-app -g  установка глобально, без -g локально 
+npx create-react-app my-app
+cd my-app
+npm start
+*/
